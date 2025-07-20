@@ -2,8 +2,9 @@ package rarible
 
 import (
 	"context"
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 	"time"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type (

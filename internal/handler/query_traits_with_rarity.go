@@ -3,9 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"errors"
-	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 	"log/slog"
 	"net/http"
+
+	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
 
 func (h *ServiceHandler) QueryTraitsWithRarity(w http.ResponseWriter, r *http.Request) {
