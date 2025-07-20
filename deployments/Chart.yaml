@@ -1,0 +1,13 @@
+apiVersion: v2
+name: rarible-integration
+description: A Helm chart for Rarible Integration Golang service
+type: application
+version: 0.1.0
+appVersion: "1.0.0"
+keywords:
+  - golang
+  - microservice
+  - rarible
+  - nft
+  - api
+home: https://github.com/vladislavprovich/rarible-integration

@@ -1,0 +1,27 @@
+replicaCount: 1
+
+config:
+  logLevel: "debug"
+  environment: "development"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 50m
+    memory: 64Mi
+
+autoscaling:
+  enabled: false
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+  hosts:
+    - host: my-golang-service-dev.local
+      paths:
+        - path: /
+          pathType: Prefix
