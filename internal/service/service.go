@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"log/slog"
-	"net/http"
 
 	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
@@ -33,13 +32,4 @@ func NewRaribleService(_ context.Context, log *slog.Logger, client rarible.Clien
 		convectorToClient:   NewConvectorToClient(),
 		convectorFromClient: NewConvectorFromClient(),
 	}
-}
-
-func (s *Service) Health(
-	_ context.Context,
-	_ rarible.HealthRequest,
-) (*rarible.HealthResponse, error) {
-	return &rarible.HealthResponse{
-		Status: http.StatusOK,
-	}, nil
 }

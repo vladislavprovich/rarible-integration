@@ -15,6 +15,7 @@ type Config struct {
 	MaxAge            int64         `envconfig:"HTTP_SERVER_MAX_AGE"`
 	AllowCredentials  bool          `envconfig:"HTTP_SERVER_ALLOW_CREDENTIALS"`
 	HTTPClientTimeout time.Duration `envconfig:"HTTP_SERVER_CLIENT_TIMEOUT"`
+	APIVersion        string        `envconfig:"HTTP_SERVER_API_VERSION"`
 }
 
 func (c Config) ValidateWithContext(ctx context.Context) error {
