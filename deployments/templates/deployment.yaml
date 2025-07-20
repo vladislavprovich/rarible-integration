@@ -1,0 +1,152 @@
+{{- include "rarible-integration.validateConfig" . -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "rarible-integration.fullname" . }}
+  labels:
+    {{- include "rarible-integration.labels" . | nindent 4 }}
+  annotations:
+    deployment.kubernetes.io/revision: "{{ .Release.Revision }}"
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      {{- include "rarible-integration.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "{{ .Values.config.server.port }}"
+        prometheus.io/path: "/metrics"
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "rarible-integration.selectorLabels" . | nindent 8 }}
+        version: {{ .Chart.AppVersion | quote }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "rarible-integration.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.config.server.port }}
+              protocol: TCP
+          env:
+            - name: SERVICE_NAME
+              value: {{ .Values.config.serviceName | quote }}
+            - name: ENVIRONMENT
+              value: {{ .Values.config.environment | quote }}
+
+            - name: SERVER_PORT
+              value: {{ .Values.config.server.port | quote }}
+            - name: SERVER_TIMEOUT_ROUTER
+              value: {{ .Values.config.server.timeoutRouter | quote }}
+            - name: SERVER_WRITE_TIMEOUT
+              value: {{ .Values.config.server.writeTimeout | quote }}
+            - name: SERVER_IDLE_TIMEOUT
+              value: {{ .Values.config.server.idleTimeout | quote }}
+            - name: SERVER_MAX_AGE
+              value: {{ .Values.config.server.maxAge | quote }}
+            - name: SERVER_ALLOW_CREDENTIALS
+              value: {{ .Values.config.server.allowCredentials | quote }}
+
+            - name: SERVER_HTTP_CLIENT_TIMEOUT
+              value: {{ .Values.config.httpClient.timeout | quote }}
+
+            - name: RARIBLE_URL_RARITIES
+              value: {{ .Values.config.rarible.urls.rarities | quote }}
+            - name: RARIBLE_URL_OWNERSHIP
+              value: {{ .Values.config.rarible.urls.ownership | quote }}
+
+            - name: LOGGER_LEVEL
+              value: {{ .Values.config.logger.level | quote }}
+            - name: LOGGER_FORMAT
+              value: {{ .Values.config.logger.format | quote }}
+            - name: LOGGER_WITH_SOURCE
+              value: {{ .Values.config.logger.withSource | quote }}
+
+            - name: RARIBLE_API_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "rarible-integration.fullname" . }}
+                  key: rarible-api-secret
+
+          livenessProbe:
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
+
+          readinessProbe:
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
+
+          startupProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            failureThreshold: 6
+            successThreshold: 1
+
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+          volumeMounts:
+            - name: tmp
+              mountPath: /tmp
+            - name: cache
+              mountPath: /app/cache
+            - name: config
+              mountPath: /app/config
+              readOnly: true
+
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - sleep 10
+
+      volumes:
+        - name: tmp
+          emptyDir: {}
+        - name: cache
+          emptyDir:
+            sizeLimit: 100Mi
+        - name: config
+          configMap:
+            name: {{ include "rarible-integration.fullname" . }}
+
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
