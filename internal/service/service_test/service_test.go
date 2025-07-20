@@ -44,15 +44,15 @@ func TestService_GetOwnershipByID(t *testing.T) {
 
 	tests := []struct {
 		name       string
-		req        *rarible.GetNFTOwnershipByIDRequest
+		req        *service.GetNFTOwnershipByIDRequest
 		clientResp *rarible.GetNFTOwnershipByIDResponse
 		clientErr  error
-		wantResp   *rarible.GetNFTOwnershipByIDResponse
+		wantResp   *service.GetNFTOwnershipByIDResponse
 		wantErr    bool
 	}{
 		{
 			name: "success",
-			req: &rarible.GetNFTOwnershipByIDRequest{
+			req: &service.GetNFTOwnershipByIDRequest{
 				OwnershipID: "ownership123",
 			},
 			clientResp: &rarible.GetNFTOwnershipByIDResponse{
@@ -75,7 +75,7 @@ func TestService_GetOwnershipByID(t *testing.T) {
 				OriginOrders: []any{},
 				Version:      1,
 			},
-			wantResp: &rarible.GetNFTOwnershipByIDResponse{
+			wantResp: &service.GetNFTOwnershipByIDResponse{
 				ID:            "ownership123",
 				Blockchain:    "ethereum",
 				ItemID:        "item456",
@@ -86,7 +86,7 @@ func TestService_GetOwnershipByID(t *testing.T) {
 				Value:         "1",
 				CreatedAt:     now,
 				LastUpdatedAt: now,
-				Creators: []rarible.Creator{
+				Creators: []service.Creator{
 					{Account: "0xcreator1", Value: 50},
 					{Account: "0xcreator2", Value: 50},
 				},
@@ -99,7 +99,7 @@ func TestService_GetOwnershipByID(t *testing.T) {
 		},
 		{
 			name:       "client error",
-			req:        &rarible.GetNFTOwnershipByIDRequest{OwnershipID: "ownership999"},
+			req:        &service.GetNFTOwnershipByIDRequest{OwnershipID: "ownership999"},
 			clientResp: nil,
 			clientErr:  errors.New("client failure"),
 			wantResp:   nil,
@@ -133,15 +133,15 @@ func TestService_PostTraitRarities(t *testing.T) {
 
 	tests := []struct {
 		name       string
-		req        *rarible.QueryTraitsWithRarityRequest
+		req        *service.QueryTraitsWithRarityRequest
 		clientResp *rarible.QueryTraitsWithRarityResponse
 		clientErr  error
-		wantResp   *rarible.QueryTraitsWithRarityResponse
+		wantResp   *service.QueryTraitsWithRarityResponse
 		wantErr    bool
 	}{
 		{
 			name: "success",
-			req: &rarible.QueryTraitsWithRarityRequest{
+			req: &service.QueryTraitsWithRarityRequest{
 				Collection: "cool-collection",
 				Key:        "color",
 				Value:      "red",
@@ -152,8 +152,8 @@ func TestService_PostTraitRarities(t *testing.T) {
 					{Key: "size", Value: "large", Rarity: "common"},
 				},
 			},
-			wantResp: &rarible.QueryTraitsWithRarityResponse{
-				Traits: []rarible.Trait{
+			wantResp: &service.QueryTraitsWithRarityResponse{
+				Traits: []service.Trait{
 					{Key: "color", Value: "red", Rarity: "rare"},
 					{Key: "size", Value: "large", Rarity: "common"},
 				},
@@ -162,7 +162,7 @@ func TestService_PostTraitRarities(t *testing.T) {
 		},
 		{
 			name: "client error",
-			req: &rarible.QueryTraitsWithRarityRequest{
+			req: &service.QueryTraitsWithRarityRequest{
 				Collection: "cool-collection",
 				Key:        "color",
 				Value:      "blue",

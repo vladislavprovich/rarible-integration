@@ -11,23 +11,27 @@ import (
 type RaribleService interface {
 	GetOwnershipByID(
 		ctx context.Context,
-		req *rarible.GetNFTOwnershipByIDRequest,
-	) (*rarible.GetNFTOwnershipByIDResponse, error)
+		req *GetNFTOwnershipByIDRequest,
+	) (*GetNFTOwnershipByIDResponse, error)
 	QueryTraitsWithRarity(
 		ctx context.Context,
-		req *rarible.QueryTraitsWithRarityRequest,
-	) (*rarible.QueryTraitsWithRarityResponse, error)
+		req *QueryTraitsWithRarityRequest,
+	) (*QueryTraitsWithRarityResponse, error)
 }
 
 type Service struct {
-	logger *slog.Logger
-	client rarible.Client
+	logger              *slog.Logger
+	client              rarible.Client
+	convectorToClient   *ConvectorToClient
+	convectorFromClient *ConvectorFromClient
 }
 
 func NewRaribleService(_ context.Context, log *slog.Logger, client rarible.Client) *Service {
 	return &Service{
-		logger: log,
-		client: client,
+		logger:              log,
+		client:              client,
+		convectorToClient:   NewConvectorToClient(),
+		convectorFromClient: NewConvectorFromClient(),
 	}
 }
 

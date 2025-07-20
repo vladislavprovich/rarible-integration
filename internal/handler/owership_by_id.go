@@ -6,13 +6,14 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/vladislavprovich/rarible-integration/internal/service"
 	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
 
 func (h *ServiceHandler) OwnershipByID(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	var req rarible.GetNFTOwnershipByIDRequest
+	var req service.GetNFTOwnershipByIDRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		h.logger.ErrorContext(ctx, "failed to decode request body", slog.Any("error", err))
 		h.sendJSON(ctx, w, http.StatusBadRequest, err)

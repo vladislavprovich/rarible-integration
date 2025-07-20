@@ -52,4 +52,4 @@ jobs:
           govulncheck ./...
 
       - name: Build
-        run: go build -v ./cmd/raribleintegration
+        run: go build -v ./cmd/rarible

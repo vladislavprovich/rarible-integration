@@ -44,6 +44,7 @@ func (c *BasicClient) GetOwnershipByID(
 
 		var apiErr APIError
 		if err = json.Unmarshal(body, &apiErr); err != nil {
+			// If the body is not parsed, we return a general error.
 			return nil, fmt.Errorf("unexpected status %d and cannot parse error body: %s",
 				res.StatusCode,
 				string(body),

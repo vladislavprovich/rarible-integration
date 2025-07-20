@@ -6,13 +6,14 @@ import (
 	"log/slog"
 	"net/http"
 
+	"github.com/vladislavprovich/rarible-integration/internal/service"
 	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
 
 func (h *ServiceHandler) QueryTraitsWithRarity(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
-	var req rarible.QueryTraitsWithRarityRequest
+	var req service.QueryTraitsWithRarityRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		h.logger.ErrorContext(ctx, "decode QueryTraitsWithRarity error", slog.Any("error", err))
 		h.sendJSON(ctx, w, http.StatusBadRequest, err)

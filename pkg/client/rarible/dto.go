@@ -1,10 +1,7 @@
 package rarible
 
 import (
-	"context"
 	"time"
-
-	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type (
@@ -81,17 +78,3 @@ type (
 		Status int `json:"status"`
 	}
 )
-
-func (r *GetNFTOwnershipByIDRequest) ValidateWithContext(ctx context.Context) error {
-	return validation.ValidateStructWithContext(ctx, r,
-		validation.Field(r.OwnershipID),
-	)
-}
-
-func (r QueryTraitsWithRarityRequest) ValidateWithContext(ctx context.Context) error {
-	return validation.ValidateStructWithContext(ctx, r,
-		validation.Field(r.Value),
-		validation.Field(r.Key),
-		validation.Field(r.Collection),
-	)
-}
