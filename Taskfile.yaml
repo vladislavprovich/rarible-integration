@@ -1,0 +1,55 @@
+version: '3'
+
+tasks:
+  start:
+    desc: "Start the local service"
+    cmds:
+      - echo "Starting local service..."
+      - go run cmd/raribleintegration/main.go --config.go=./.env
+    ignore_error: true
+    silent: false
+
+  lint:
+    desc: "Run Go linters"
+    cmds:
+      - echo "Running linters..."
+      - go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest
+      - golangci-lint run --timeout=5m
+    silent: false
+
+  vulncheck:
+    desc: "Check for security vulnerabilities"
+    cmds:
+      - echo "Checking for security vulnerabilities..."
+      - go install golang.org/x/vuln/cmd/govulncheck@latest
+      #      - $env:Path += ";" + (go env GOPATH) + "\bin"  Temporarily adds to PATH
+      - govulncheck ./...
+    silent: false
+
+  fmt:
+    desc: "Format Go code"
+    cmds:
+      - echo "Formatting code..."
+      - gofmt -w .
+    silent: false
+
+  test:
+    desc: "Run unit tests"
+    cmds:
+      - echo "Running tests..."
+      - go test -v ./...
+    silent: false
+
+  build:
+    desc: "Build the project"
+    cmds:
+      - echo "Building the project..."
+      - go build -o userinfo cmd/main.go
+    silent: false
+
+  imports:
+    desc: "Format imports"
+    cmds:
+      - echo "Formatting import..."
+      - goimports -w .
+    silent: false
