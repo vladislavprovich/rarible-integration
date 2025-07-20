@@ -2,10 +2,8 @@ package service
 
 import (
 	"context"
-	"log/slog"
-	"net/http"
-
 	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
+	"log/slog"
 )
 
 type RaribleService interface {
@@ -29,13 +27,4 @@ func NewRaribleService(_ context.Context, log *slog.Logger, client rarible.Clien
 		logger: log,
 		client: client,
 	}
-}
-
-func (s *Service) Health(
-	_ context.Context,
-	_ rarible.HealthRequest,
-) (*rarible.HealthResponse, error) {
-	return &rarible.HealthResponse{
-		Status: http.StatusOK,
-	}, nil
 }

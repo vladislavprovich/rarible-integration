@@ -10,7 +10,6 @@ require (
 	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/stretchr/testify v1.10.0
 	github.com/unrolled/render v1.7.0
-	github.com/vladislavprovich/rarible-service-test v0.0.0-20250720161923-b829872cc0e8
 )
 
 require (

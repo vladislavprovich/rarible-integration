@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -40,7 +41,8 @@ func NewRouter(handler Handler, logger *slog.Logger, cfg *Config) *chi.Mux {
 		NoColor: false,
 	}))
 
-	mux.Route("/rarible", func(r chi.Router) {
+	routUrl := fmt.Sprintf("api/%s/rarible", cfg.ApiVersion)
+	mux.Route(routUrl, func(r chi.Router) {
 		r.Get("/ownership", handler.OwnershipByID)
 		r.Post("/rarities", handler.QueryTraitsWithRarity)
 	})
