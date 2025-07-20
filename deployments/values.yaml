@@ -123,7 +123,7 @@ config:
 
 secrets:
   rarible:
-    apiSecret: "af882ffb-feec-47e0-8803-5f8f33adc20b"
+    apiSecret: "test"
 
 podDisruptionBudget:
   enabled: true
