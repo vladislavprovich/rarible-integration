@@ -3,8 +3,9 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 	"net/http"
+
+	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
 
 func (h *ServiceHandler) Health(writer http.ResponseWriter, reader *http.Request) {

@@ -41,8 +41,8 @@ func NewRouter(handler Handler, logger *slog.Logger, cfg *Config) *chi.Mux {
 		NoColor: false,
 	}))
 
-	routUrl := fmt.Sprintf("api/%s/rarible", cfg.ApiVersion)
-	mux.Route(routUrl, func(r chi.Router) {
+	mainRoute := fmt.Sprintf("api/%s/rarible", cfg.APIVersion)
+	mux.Route(mainRoute, func(r chi.Router) {
 		r.Get("/ownership", handler.OwnershipByID)
 		r.Post("/rarities", handler.QueryTraitsWithRarity)
 	})

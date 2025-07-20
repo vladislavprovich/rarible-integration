@@ -2,8 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 	"net/http"
+
+	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
 
 func (s *Service) Health(

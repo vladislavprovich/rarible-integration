@@ -2,8 +2,9 @@ package service
 
 import (
 	"context"
-	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 	"log/slog"
+
+	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
 )
 
 type RaribleService interface {
