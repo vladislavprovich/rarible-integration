@@ -2,9 +2,8 @@ package rarible
 
 import (
 	"context"
-	"time"
-
 	validation "github.com/go-ozzo/ozzo-validation/v4"
+	"time"
 )
 
 type (
@@ -82,13 +81,13 @@ type (
 	}
 )
 
-func (r *GetNFTOwnershipByIDRequest) ValidateWithContext(ctx context.Context) error {
+func (r *GetNFTOwnershipByIDRequest) Validate(ctx context.Context) error {
 	return validation.ValidateStructWithContext(ctx, r,
 		validation.Field(r.OwnershipID),
 	)
 }
 
-func (r QueryTraitsWithRarityRequest) ValidateWithContext(ctx context.Context) error {
+func (r QueryTraitsWithRarityRequest) Validate(ctx context.Context) error {
 	return validation.ValidateStructWithContext(ctx, r,
 		validation.Field(r.Value),
 		validation.Field(r.Key),

@@ -2,9 +2,8 @@ package service
 
 import (
 	"context"
-	"log/slog"
-
 	"github.com/vladislavprovich/rarible-integration/pkg/client/rarible"
+	"log/slog"
 )
 
 func (s *Service) QueryTraitsWithRarity(
